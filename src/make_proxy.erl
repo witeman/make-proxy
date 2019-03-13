@@ -9,6 +9,8 @@
 -module(make_proxy).
 -author("wang").
 
+-compile([{parse_transform, lager_transform}]).
+
 %% API
 -export([start_server/0,
     start_client/0]).
@@ -28,8 +30,11 @@ start_server() ->
     ).
 
 start_client() ->
+    {ok, _} = application:ensure_all_started(lager),
     {ok, _} = application:ensure_all_started(make_proxy),
     {ok, Port} = application:get_env(make_proxy, client_port),
+
+    lager:info("make-proxy client started!"),
 
     TransOpts = transport_opts(Port),
 

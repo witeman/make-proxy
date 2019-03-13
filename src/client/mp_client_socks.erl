@@ -7,6 +7,8 @@
 
 -include("mp_client.hrl").
 
+-compile([{parse_transform, lager_transform}]).
+
 detect_head(4) ->
     true;
 
@@ -23,6 +25,9 @@ request(Data,
     Data1 = <<Buffer/binary, Data/binary>>,
     case find_target(Data1) of
         {ok, Target, Body, Response} ->
+            {ok, {IP, _}} = inet:peername(Socket),
+            {T, P} = Target,
+            lager:info("target:~s:~p, ip:~s", [T, P, lists:concat(lists:join(".", erlang:tuple_to_list(IP)))]),
             case mp_client_utils:connect_to_remote() of
                 {ok, Remote} ->
                     EncryptedTarget = mp_crypto:encrypt(Key, term_to_binary(Target)),
