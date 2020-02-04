@@ -3,7 +3,7 @@
          decrypt/2]).
 
 -define(TAGLENGTH, 16).
--define(IV, <<2020020211223344:64>>).
+-define(IV, <<2020020211223344:96>>).
 -define(ADD, <<"jflkadsj^de$@#56*sxdfrtg">>).
 
 -spec encrypt(nonempty_string(), binary()) -> binary().
